@@ -46,7 +46,7 @@ class PatchEmbed(nn.Module):
         self.norm = norm_layer(embed_dim) if norm_layer else nn.Identity()
 
     def forward(self, x):
-        x = self.proj(x)
+        x = self.proj(x.unsqueeze(0).transpose(0,1)) #이동준변경!
         if self.flatten:
             x = x.permute(0, 2, 3, 1)  # channels-last
         x = self.norm(x)
@@ -75,7 +75,8 @@ class FlashAttention(nn.Module):
 
     def forward(self, x):
         B, N, C = x.shape
-        qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
+        qkv_temp = self.qkv(x)
+        qkv = qkv_temp.reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
         q, k, v = qkv  # each one has shape batch_size, num_heads, seq_length, embed_dim
 
         if self.use_rotary:

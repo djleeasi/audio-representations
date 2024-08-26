@@ -135,7 +135,7 @@ def main(cfg: DictConfig) -> Optional[float]:
     :return: Optional[float] with optimized metric value.
     """
     # handle A100 GPUs
-    if torch.cuda.is_available() and "A100" in torch.cuda.get_device_name():
+    if torch.cuda.is_available():
         torch.set_float32_matmul_precision("high")
 
     # apply extra utilities

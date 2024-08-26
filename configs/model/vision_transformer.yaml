@@ -3,7 +3,7 @@ _target_: src.models.m2d_module.M2DModule
 encoder:
   _target_: src.models.components.vision_transformer.ViTEncoder
   img_size:
-    - 80
+    - 48
     - 208
   in_chans: 1
   patch_size: 16
